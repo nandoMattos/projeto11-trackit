@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import GlobalStyle from "./GlobalStyle";
+import {BrowserRouter, Routes, Route} from "react-router-dom"
+import SignIn from "./pages/Authentication/SignIn"
+import SignUp from "./pages/Authentication/SignUp";
+import Nav from "./components/Nav";
+import HabitsPage from "./pages/HabitsPage/HabitsPage";
+import LoginContext from "./context/LoginContext";
+import { useState } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export default function App() {
 
-export default App;
+    const [authInfo, setAuthInfo] = useState(undefined);
+    
+    return (
+        <>
+            <GlobalStyle/>
+            <Nav/>
+
+            <LoginContext.Provider value={{authInfo, setAuthInfo}}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<SignIn/>} />
+                        <Route path="/cadastrar" element={<SignUp/>} />
+
+                        <Route path="/habitos" element={<HabitsPage/>}/>
+                    </Routes>
+                </BrowserRouter>    
+            </LoginContext.Provider>
+
+    
+        </>
+    )
+};
