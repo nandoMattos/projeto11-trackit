@@ -2,7 +2,6 @@ import GlobalStyle from "./GlobalStyle";
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import SignIn from "./pages/Authentication/SignIn"
 import SignUp from "./pages/Authentication/SignUp";
-import Nav from "./components/Nav";
 import HabitsPage from "./pages/HabitsPage/HabitsPage";
 import LoginContext from "./context/LoginContext";
 import { useState } from "react";
@@ -14,8 +13,6 @@ export default function App() {
     return (
         <>
             <GlobalStyle/>
-            <Nav/>
-
             <LoginContext.Provider value={{authInfo, setAuthInfo}}>
                 <BrowserRouter>
                     <Routes>

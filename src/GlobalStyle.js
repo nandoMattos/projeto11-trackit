@@ -71,7 +71,7 @@ input {
 	border-radius: 5px;
 	border: 2px solid #D5D5D5;
 	font-family: 'Lexend Deca', sans-serif;
-	padding-left: 20px;
+	padding-left: 15px;
 }
 
 input::placeholder {

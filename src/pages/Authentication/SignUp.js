@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { API_URL } from "../../constants/urls";
 
@@ -11,6 +11,7 @@ export default function SignUp() {
     const [inputName, setInputName] = useState("");
     const [inputPicture, setInputPicture] = useState("");
 
+    const navigate = useNavigate();
 
     function handleForm(e) {
         e.preventDefault();
@@ -23,7 +24,7 @@ export default function SignUp() {
         };
 
         axios.post(`${API_URL}/auth/sign-up`, body)
-        .then((res)=>console.log(res))
+        .then((res)=>navigate("/"))
         .catch((err)=>console.log(err))
     }
 

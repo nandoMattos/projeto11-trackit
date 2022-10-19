@@ -1,12 +1,16 @@
+import { useContext} from "react"
 import styled from "styled-components"
 import {SECONDARY_COLOR} from "../constants/colors"
+import LoginContext from "../context/LoginContext"
 
 export default function Nav() {
+    const {authInfo} = useContext(LoginContext)
+
     return (
         <NavStyle>
             <div>
                 <h1>TrackIt</h1>
-                <img src="https://pbs.twimg.com/profile_images/2209676047/gatinho-5755_400x400.jpg" alt="seila"/>
+                {authInfo && <img src={authInfo.image} alt="profile pic"/>}
             </div>
         </NavStyle>
     )

@@ -25,7 +25,7 @@ export default function SignIn() {
             setAuthInfo(res.data)
             navigate("/habitos")
         })
-        .catch(err=>console.log(err.response.data))
+        .catch(err=>alert(err.response.data.message))
     }
 
     return (

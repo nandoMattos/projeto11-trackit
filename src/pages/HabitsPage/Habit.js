@@ -1,22 +1,30 @@
-import { useState } from "react"
+import axios from "axios"
+import { useContext } from "react"
 import styled from "styled-components"
 import {SELECTED_COLOR, TEXT_COLOR } from "../../constants/colors"
+import { API_URL } from "../../constants/urls"
 import { WEEKDAYS } from "../../constants/weekdays"
+import LoginContext from "../../context/LoginContext"
 
-export default function Habit({habitName, setHabit}) {
+export default function Habit({habitName, habitDays, habitId}) {
 
-    const [selectedWeekdays, setSelectedWeekdays] = useState([])
-
-    function toggleWeekdaySelection(weekdayId) {
-        if(selectedWeekdays.includes(weekdayId)) {
-            setSelectedWeekdays(selectedWeekdays.filter((id)=> id !== weekdayId))
-        } else{
-            setSelectedWeekdays([...selectedWeekdays, weekdayId])
+    const {authInfo} = useContext(LoginContext)
+    
+    function deleteHabit() {
+        const confirm = prompt(`Deseja remover "${habitName}?" (Digite sim ou não)`)
+        if(!confirm || confirm.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() !== 'sim'){
+            return
         }
-    }
 
-    function removeHabit() {
-        
+        const config = {
+            headers:{
+                Authorization: `Bearer ${authInfo.token}` 
+            }
+        };
+
+        axios.delete(`${API_URL}/habits/${habitId}`, config)
+        .then(res=>console.log(res))
+        .catch(err=>alert(err.response.data.message))
     }
 
     return (
@@ -25,18 +33,18 @@ export default function Habit({habitName, setHabit}) {
 
             <WeekdaysContainer>
                 {WEEKDAYS.map((w)=>
-                    <ButtonStyle
+                    <Weekday 
                         key={w.id}
-                        statusBackground={selectedWeekdays.includes(w.id) ? SELECTED_COLOR : "white"}
-                        statusFont={selectedWeekdays.includes(w.id) ? "white" : SELECTED_COLOR}
-                        onClick={()=> toggleWeekdaySelection(w.id)}
+                        statusBackground={habitDays.includes(w.id) ? SELECTED_COLOR : "white"}
+                        statusFont={habitDays.includes(w.id) ? "white" : SELECTED_COLOR}
                     >
                     {w.name}
-                    </ButtonStyle>
+                    </Weekday>
                 )}
             </WeekdaysContainer>
-            <TrashIconDiv onClick={removeHabit}>
-                <ion-icon name="trash-outline"></ion-icon>
+            
+            <TrashIconDiv>
+                <ion-icon onClick={deleteHabit} name="trash-outline"></ion-icon>
             </TrashIconDiv>
         </ItemHabit>
     )
@@ -47,28 +55,39 @@ const ItemHabit = styled.li`
     flex-direction: column;
     justify-content: space-evenly;
     width: 100%;
-    height: 91px;
+    height: fit-content;
     background-color: white;
     border-radius: 5px;
     margin-bottom: 15px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
     position: relative;
+    padding: 20px;
 
     h1{
         margin-left: 15px;
         margin-top: 5px;
         color: ${TEXT_COLOR};
+        flex-wrap: wrap;
+        word-wrap: break-word;
+        width: 90%;
+        padding-bottom: 10px;
     }
 `
 const WeekdaysContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     margin-left: 15px;
+
 `
-const ButtonStyle = styled.button`
-	display: flex;
-	justify-content: center;
-	align-items: center;
+const TrashIconDiv = styled.div`
+    position: absolute;
+    top: 15px;
+    right: 10px;
+`
+const Weekday = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 30px;
     height: 30px;
     margin-right: 5px;
@@ -76,9 +95,5 @@ const ButtonStyle = styled.button`
     background-color: ${({statusBackground})=>statusBackground};
     color: ${({statusFont})=>statusFont};
     border: 2px solid ${SELECTED_COLOR};
-`
-const TrashIconDiv = styled.div`
-    position: absolute;
-    top: 15px;
-    right: 10px;
+    border-radius: 5px;
 `
