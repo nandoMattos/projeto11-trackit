@@ -79,10 +79,13 @@ const LoginContainer = styled.div`
     justify-content: space-evenly;
     width: 90%;
     height: 90%;
-    /* background-color: lightcoral; */
     
     img{
         width: 400px;
+    }
+
+    a {
+        text-decoration: underline;
     }
 `
 
@@ -100,4 +103,4 @@ const FormLoginContainer = styled.div`
         height: 95%;
         font-family: "Lexend Deca", sans-serif;
     }
-`
+`   

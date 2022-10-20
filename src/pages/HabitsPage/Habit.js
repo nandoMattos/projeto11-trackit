@@ -6,9 +6,10 @@ import { API_URL } from "../../constants/urls"
 import { WEEKDAYS } from "../../constants/weekdays"
 import LoginContext from "../../context/LoginContext"
 
-export default function Habit({habitName, habitDays, habitId}) {
+export default function Habit({habitName, habitDays, habitId, changedHabits, setChangedHabits}) {
 
     const {authInfo} = useContext(LoginContext)
+    
     
     function deleteHabit() {
         const confirm = prompt(`Deseja remover "${habitName}?" (Digite sim ou não)`)
@@ -25,6 +26,8 @@ export default function Habit({habitName, habitDays, habitId}) {
         axios.delete(`${API_URL}/habits/${habitId}`, config)
         .then(res=>console.log(res))
         .catch(err=>alert(err.response.data.message))
+
+        setChangedHabits(!changedHabits);
     }
 
     return (

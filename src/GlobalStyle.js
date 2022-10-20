@@ -49,11 +49,14 @@ table {
 *{
 	box-sizing: border-box;
 	font-family:'Lexend Deca', sans-serif ;
+	-webkit-tap-highlight-color: transparent;
 }
 
 a{
 	color: ${MAIN_COLOR};
 	font-weight: bold;
+	font-family:'Lexend Deca', sans-serif ;
+	text-decoration: none;
 }
 
 a:visited {
@@ -61,7 +64,7 @@ a:visited {
 }
 
 main {
-	margin-top: 70px;
+	margin: 70px 0 75px 0;
 	background-color: #F2F2F2F2;
 }
 
@@ -76,6 +79,10 @@ input {
 
 input::placeholder {
 	color: ${TEXT_COLOR};
+}
+
+input:focus {
+	outline: none;
 }
 
 button {

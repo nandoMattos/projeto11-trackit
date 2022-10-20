@@ -1,51 +1,72 @@
-import { useContext} from "react"
 import styled from "styled-components"
-import {SECONDARY_COLOR} from "../constants/colors"
-import LoginContext from "../context/LoginContext"
+import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar"
+import 'react-circular-progressbar/dist/styles.css';
+import { useState } from "react";
+import { MAIN_COLOR } from "../constants/colors";
+import { Link } from "react-router-dom";
 
 export default function Nav() {
-    const {authInfo} = useContext(LoginContext)
-
+    const [percentage, setPerecentage] = useState(50)
+    
     return (
-        <NavStyle>
-            <div>
-                <h1>TrackIt</h1>
-                {authInfo && <img src={authInfo.image} alt="profile pic"/>}
-            </div>
-        </NavStyle>
+        <Menu>
+            <Link to="/habitos">
+                Hábitos
+            </Link>
+
+            <Link to="/hoje">
+                <ProgressbarContainer>
+                    <CircularProgressbarWithChildren 
+                        value={percentage}
+                        background={true}
+                        backgroundPadding = {6}
+                        styles={buildStyles({
+                            backgroundColor: MAIN_COLOR,
+                            trailColor: MAIN_COLOR,
+                            pathColor: "white",
+                        })}
+                    >
+                        <div style={{ fontSize: 19, marginTop: -5 }}>
+                        <strong>Hoje</strong>
+                        </div>
+                    </CircularProgressbarWithChildren>
+                </ProgressbarContainer>
+            </Link>
+
+            <Link to="/historico">
+                Histórico
+            </Link>
+        </Menu>
     )
 };
 
-const NavStyle = styled.nav`
+const Menu = styled.nav`
     display: flex;
+    justify-content: space-evenly;
     align-items: center;
+    background-color: white;
     width: 100%;
     height: 70px;
     position: fixed;
-    top: 0;
-    right: 0%;
-    background-color: ${SECONDARY_COLOR};
-    font-family: 'Playball', cursive;
+    bottom: 0;
+    left: 0;
     z-index: 5;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.15);
 
-    div{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 0 auto;
-        width: 90%;
+    a{
+        font-weight: 400;
+        font-size: 20px;
+        padding: 10px;
     }
 
-    h1{
-        font-size: 40px;
-        color: white;
-    }
+`
 
-    img {
-        width: 55px;
-        height: 55px;
-        object-fit: cover;
-        border-radius: 50%;
-    }
+const ProgressbarContainer = styled.div`
+    transform: translate(0, -30px);
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+
+    font-family: 'Lexend Deca', sans-serif;
+    color:white;
 `

@@ -112,4 +112,8 @@ const FormSignUpContainer = styled.div `
         height: 100%;
         font-family: "Lexend Deca", sans-serif;
     }
+
+    a {
+        text-decoration: underline;
+    }
 `

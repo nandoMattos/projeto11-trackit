@@ -3,28 +3,37 @@ import {BrowserRouter, Routes, Route} from "react-router-dom"
 import SignIn from "./pages/Authentication/SignIn"
 import SignUp from "./pages/Authentication/SignUp";
 import HabitsPage from "./pages/HabitsPage/HabitsPage";
+import TodayPage from "./pages/TodayPage/TodayPage";
 import LoginContext from "./context/LoginContext";
 import { useState } from "react";
+import HistoryPage from "./pages/HistoryPage/HistoryPage";
+import ProgressContext from "./context/ProgressContext";
 
 export default function App() {
 
     const [authInfo, setAuthInfo] = useState(undefined);
+    const [userProgress, setUserProgress] = useState(undefined)
     
     return (
         <>
             <GlobalStyle/>
             <LoginContext.Provider value={{authInfo, setAuthInfo}}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<SignIn/>} />
-                        <Route path="/cadastrar" element={<SignUp/>} />
+                <ProgressContext.Provider value={{userProgress, setUserProgress}}>
+                    <BrowserRouter>
+                        <Routes>
+                            {/* Authentication */}
+                            <Route path="/" element={<SignIn/>} />
+                            <Route path="/cadastrar" element={<SignUp/>} />
 
-                        <Route path="/habitos" element={<HabitsPage/>}/>
-                    </Routes>
-                </BrowserRouter>    
+                            {/* Pages */}
+                            <Route path="/habitos" element={<HabitsPage/>}/>
+                            <Route path="/hoje" element={<TodayPage/>}/>
+                            <Route path="/historico" element={<HistoryPage/>}/>
+
+                        </Routes>
+                    </BrowserRouter>    
+                </ProgressContext.Provider>
             </LoginContext.Provider>
-
-    
         </>
     )
 };

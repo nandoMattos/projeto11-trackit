@@ -15,6 +15,8 @@ export default function NewHabitForm(props) {
         setInputHabitName,
         selectedWeekdays,
         setSelectedWeekdays,
+        changedHabits,
+        setChangedHabits
 
     } = props;
 
@@ -42,6 +44,11 @@ export default function NewHabitForm(props) {
         axios.post(`${API_URL}/habits`, body, config)
         .then(res=>console.log(res))
         .catch(err=>alert(err.response.data.message))
+
+        setShowNewHabitForm(!showNewHabitForm)
+        setChangedHabits(!changedHabits);
+        setInputHabitName("")
+        setSelectedWeekdays([])
     }
 
     return (
@@ -93,10 +100,6 @@ const NewHabitContainer = styled.div`
 
     input::placeholder {
         color: ${SELECTED_COLOR};
-    }
-
-    input:focus {
-        outline: none;
     }
 `
 

@@ -6,6 +6,7 @@ import axios from "axios";
 import { API_URL } from "../../constants/urls";
 import { useNavigate } from "react-router-dom";
 import LoginContext from "../../context/LoginContext";
+import Header from "../../components/Header";
 import Nav from "../../components/Nav";
 
 export default function HabitsPage() {
@@ -13,37 +14,39 @@ export default function HabitsPage() {
     const [habits, setHabits] = useState([])
     const [showNewHabitForm, setShowNewHabitForm] = useState(false);
     const [inputHabitName, setInputHabitName] = useState("");
-    const [selectedWeekdays, setSelectedWeekdays] = useState([])
+    const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+    const [changedHabits, setChangedHabits] = useState(false); 
 
     const navigate = useNavigate();
     const {authInfo} = useContext(LoginContext);
+
 
     useEffect(()=>{
         if(authInfo === undefined){
             return navigate("/");
         }
+        console.log('oi')
 
         const config = {
             headers:{
                 Authorization: `Bearer ${authInfo.token}`
             }
         }
+
         axios.get(`${API_URL}/habits`, config)
-        .then(res=>{
-            setHabits(res.data)
-        })
+        .then((res)=>setHabits((res.data).reverse()))
         .catch(err=>console.log(err))
-    },[])
+
+    },[changedHabits])
 
     return (
         <>
-        <Nav/>
+        <Header/>
 
         <HabitsScreen>
             <header>
                 <h1>Meus hábitos</h1>
                 <button onClick={()=>setShowNewHabitForm(!showNewHabitForm)}>+</button>
-
             </header>
                 <HabitsContainer>
                     {showNewHabitForm && 
@@ -54,6 +57,8 @@ export default function HabitsPage() {
                         setInputHabitName = {setInputHabitName}
                         selectedWeekdays = {selectedWeekdays}
                         setSelectedWeekdays = {setSelectedWeekdays}
+                        changedHabits={changedHabits}
+                        setChangedHabits={setChangedHabits}
                     />}
                     {habits.length !== 0 ? 
                         <ul>
@@ -63,6 +68,8 @@ export default function HabitsPage() {
                                     habitName={h.name}
                                     habitDays={h.days}
                                     habitId={h.id}
+                                    changedHabits={changedHabits}
+                                    setChangedHabits={setChangedHabits}
                                 />
                             )}
                         </ul>
@@ -71,6 +78,8 @@ export default function HabitsPage() {
                     }
                 </HabitsContainer>
         </HabitsScreen>
+
+        <Nav/>
         </>
     )
 };
