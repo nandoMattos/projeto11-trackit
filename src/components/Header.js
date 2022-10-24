@@ -10,7 +10,7 @@ export default function Header() {
         <NavStyle>
             <div>
                 <h1>TrackIt</h1>
-                {authInfo && <img src={authInfo.image} alt="profile pic"/>}
+                {authInfo && <img src={authInfo.image} data-identifier="avatar" alt="profile pic"/>}
             </div>
         </NavStyle>
     )

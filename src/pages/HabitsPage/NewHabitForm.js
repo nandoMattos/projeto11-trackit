@@ -65,6 +65,7 @@ export default function NewHabitForm(props) {
                 placeholder="nome do habito"
                 value={inputHabitName}
                 disabled={isLoading}
+                data-identifier="input-habit-name"
             />
 
             <WeekdaysContainer>
@@ -75,6 +76,7 @@ export default function NewHabitForm(props) {
                         statusFont={selectedWeekdays.includes(w.id) ? "white" : SELECTED_COLOR}
                         onClick={()=> toggleWeekdaySelection(w.id)}
                         disabled={isLoading}
+                        data-identifier="week-day-btn"
                     >
                     {w.name}
                     </WeekdayButton>
@@ -85,6 +87,7 @@ export default function NewHabitForm(props) {
                 <CancelButton 
                     onClick={()=> setShowNewHabitForm(!showNewHabitForm)}
                     disabled={isLoading}
+                    data-identifier="cancel-habit-create-btn"
                 >
                     Cancelar
                 </CancelButton>
@@ -92,6 +95,7 @@ export default function NewHabitForm(props) {
                 <ConfirmButton 
                     onClick={submitHabit}
                     disabled={isLoading}
+                    data-identifier="save-habit-create-btn"
                 >
                     {
                         isLoading ?

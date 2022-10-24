@@ -37,6 +37,8 @@ export default function TodayPage() {
         }
         if(todayHabits.length !== 0){
             setUserProgress((countHabits/todayHabitsAmount)*100)
+        } else{
+            setUserProgress(0)
         }
 
     }
@@ -45,7 +47,7 @@ export default function TodayPage() {
         if(authInfo === undefined){
             return navigate("/");
         }
-       
+        
         const config = {
             headers:{
                 Authorization: `Bearer ${authInfo.token}`
@@ -53,9 +55,9 @@ export default function TodayPage() {
         }
         axios.get(`${API_URL}/habits/today`, config)
         .then((res)=>{
+            setIsLoading(false)
             setTodayHabits(res.data)
             calculateProgress(res.data)
-            setIsLoading(false)
         })
         .catch(err=>console.log(err))
     
@@ -68,7 +70,7 @@ export default function TodayPage() {
             <TodayScreen>
                 <header>
                     <HeaderDiv>
-                        <h1>{todayWeekday.weekday}, {dayjs().format("DD/MM")}</h1>
+                        <h1 data-identifier="today-infos">{todayWeekday.weekday}, {dayjs().format("DD/MM")}</h1>
 
                         <SpinnerDiv>
                             <RotatingLines 
@@ -81,14 +83,16 @@ export default function TodayPage() {
                     </HeaderDiv>
                     {
                     userProgress !== 0 ? 
-                    <Feedback//
+                    <Feedback
                         color={CHECKED_GREEN}
+                        data-identifier="today-infos"
                     >
                         {Math.round(userProgress)}% dos hábitos concluídos
                     </Feedback>
                     :
                     <Feedback
                         color={TEXT_COLOR}
+                        data-identifier="today-infos"
                     >
                         Nenhum hábito concluído ainda
                     </Feedback>
@@ -128,7 +132,7 @@ const TodayScreen = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;    
 
     header {
@@ -144,7 +148,6 @@ const TodayScreen = styled.main`
 
 
     ul {
-        /* background-color: green; */
         width: 80%;
     }
 

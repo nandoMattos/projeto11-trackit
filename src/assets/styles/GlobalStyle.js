@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { MAIN_COLOR, SECONDARY_COLOR, TEXT_COLOR } from "./constants/colors";
+import { MAIN_COLOR, SECONDARY_COLOR, TEXT_COLOR } from "../../constants/colors";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -73,10 +73,7 @@ body {
 main {
 	margin: 70px 0 75px 0;
 	background-color: #F2F2F2F2;
-
-	@media (min-width: 600px) {
-        height: 100vh;
-    }
+	min-height: 80vh;
 }
 
 input {

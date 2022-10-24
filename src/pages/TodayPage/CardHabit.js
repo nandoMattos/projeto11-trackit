@@ -38,7 +38,7 @@ export default function CardHabit(props) {
 
     return (
         <ItemCard>
-            <Text>
+            <Text data-identifier="today-infos">
                 <h1>{name}</h1>
                 <p>Sequência atual: 
                     <Span 
@@ -59,7 +59,7 @@ export default function CardHabit(props) {
             <CheckBox
                 bgColor = {isChecked ? CHECKED_GREEN : UNCHECKED_GRAY}
             >
-                <ion-icon onClick={isChecked ? ()=>handleCheck("uncheck") : ()=>handleCheck("check")} 
+                <ion-icon data-identifier="done-habit-btn" onClick={isChecked ? ()=>handleCheck("uncheck") : ()=>handleCheck("check")} 
                 name="checkmark-outline"/>
             </CheckBox>
 

@@ -4,6 +4,8 @@ import { ColorRing } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { API_URL } from "../../constants/urls";
+import image from '../../assets/images/logo.png'
+
 
 export default function SignUp() {
 
@@ -41,7 +43,7 @@ export default function SignUp() {
     return (
         <SignUpScreen>
             <SignUpContainer>
-                <img alt="Logo Login" src="https://img.freepik.com/fotos-premium/cachorrinho-fofo-de-spitz-pomeranian-deitado-no-fundo-amarelo-brilhante_253512-22.jpg?w=2000"/>
+                <img alt="Logo Login" src={image}/>
 
                 <FormSignUpContainer>
                     <form onSubmit={handleForm}>
@@ -52,6 +54,7 @@ export default function SignUp() {
                             onChange={e => setInputEmail(e.target.value)}
                             value={inputEmail}
                             disabled={isLoading}
+                            data-identifier="input-email"
                         />
 
                         <input 
@@ -62,6 +65,7 @@ export default function SignUp() {
                             onChange={e => setInputPassword(e.target.value)}
                             value={inputPassword}
                             disabled={isLoading}
+                            data-identifier="input-password"
                         />
                         <input 
                             type="text"
@@ -70,6 +74,7 @@ export default function SignUp() {
                             onChange={e => setInputName(e.target.value)}
                             value={inputName}
                             disabled={isLoading}
+                            data-identifier="input-name"
                         />
                         <input
                             type="url"
@@ -78,6 +83,7 @@ export default function SignUp() {
                             onChange={e => setInputPicture(e.target.value)}
                             value={inputPicture}
                             disabled={isLoading}
+                            data-identifier="input-photo"
                         />
 
                         <button type="submit" disabled={isLoading}>
@@ -94,7 +100,7 @@ export default function SignUp() {
                             }
                         </button>
 
-                        <Link to="/">
+                        <Link to="/" disabled={isLoading} data-identifier="back-to-login-action">
                             Já tem uma conta? Faça login!
                         </Link>
                     </form>
@@ -124,7 +130,7 @@ const SignUpContainer = styled.div`
     height: 90%;
     
     img{
-        width: 400px;
+        width: 250px;
     }
 `
 

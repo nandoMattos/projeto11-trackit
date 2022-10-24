@@ -8,7 +8,10 @@ export default function HistoryPage() {
             <Header/>
         
             <HistoryScreen>
-                history
+                <header>
+                    <h1>Histórico</h1>
+                </header>
+                <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
             </HistoryScreen>
 
             <Nav/>
@@ -17,5 +20,15 @@ export default function HistoryPage() {
 };
 
 const HistoryScreen = styled.main`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 
+    p{
+        font-size: 20px;
+        width: 80%;
+    }
+    
+        
 `

@@ -30,7 +30,7 @@ export default function Habit({habitName, habitDays, habitId, setIsLoading}) {
 
     return (
         <ItemHabit>
-            <h1>{habitName}</h1>
+            <h1 data-identifier="habit-name">{habitName}</h1>
 
             <WeekdaysContainer>
                 {WEEKDAYS.map((w)=>
@@ -44,7 +44,7 @@ export default function Habit({habitName, habitDays, habitId, setIsLoading}) {
                 )}
                 
                 <TrashIconDiv>
-                    <ion-icon onClick={deleteHabit} name="trash-outline"></ion-icon>
+                    <ion-icon data-identifier="delete-habit-btn" onClick={deleteHabit} name="trash-outline"></ion-icon>
                 </TrashIconDiv>
             </WeekdaysContainer>            
         

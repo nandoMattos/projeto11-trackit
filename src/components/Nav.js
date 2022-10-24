@@ -11,7 +11,7 @@ export default function Nav() {
     
     return (
         <Menu>
-            <Link to="/habitos">
+            <Link to="/habitos" data-identifier="habit-page-action">
                 Hábitos
             </Link>
 
@@ -34,7 +34,7 @@ export default function Nav() {
                 </ProgressbarContainer>
             </Link>
 
-            <Link to="/historico">
+            <Link to="/historico" data-identifier="historic-page-action">
                 Histórico
             </Link>
         </Menu>

@@ -5,6 +5,7 @@ import styled from "styled-components"
 import {API_URL} from "../../constants/urls"
 import LoginContext from "../../contexts/LoginContext"
 import { ColorRing } from "react-loader-spinner";
+import image from '../../assets/images/logo.png'
 
 export default function SignIn() {
 
@@ -37,7 +38,7 @@ export default function SignIn() {
     return (
         <LoginScreen>
             <LoginContainer>
-                <img alt="Logo Login" src="https://img.freepik.com/fotos-premium/cachorrinho-fofo-de-spitz-pomeranian-deitado-no-fundo-amarelo-brilhante_253512-22.jpg?w=2000"/>
+                <img src={image} alt="Logo Login"></img>
 
                 <FormLoginContainer>
                     <form onSubmit={handleForm}>
@@ -109,7 +110,7 @@ const LoginContainer = styled.div`
     height: 90%;
     
     img{
-        width: 400px;
+        width: 250px;
     }
 
     a {

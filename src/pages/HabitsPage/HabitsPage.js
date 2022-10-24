@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import LoginContext from "../../contexts/LoginContext";
 import Header from "../../components/Header";
 import Nav from "../../components/Nav";
-import ProgressContext from "../../contexts/ProgressContext";
 import { RotatingLines } from "react-loader-spinner";
 import { MAIN_COLOR } from "../../constants/colors";
 
@@ -39,7 +38,7 @@ export default function HabitsPage() {
             setIsLoading(false)
         })
         .catch(err=>console.log(err))
-        
+        // eslint-disable-next-line
     },[isLoading])
 
 
@@ -59,7 +58,7 @@ export default function HabitsPage() {
                         />
                     </SpinnerDiv>
                 </h1>
-                <button onClick={()=>setShowNewHabitForm(!showNewHabitForm)}>+</button>
+                <button data-identifier="create-habit-btn" onClick={()=>setShowNewHabitForm(!showNewHabitForm)}>+</button>
             </header>
                 <HabitsContainer>
                     {showNewHabitForm && 
@@ -87,7 +86,7 @@ export default function HabitsPage() {
                             )}
                         </ul>
                         :
-                        !isLoading && <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                        !isLoading && <p data-identifier="no-habit-message" >Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                     }
                 </HabitsContainer>
         </HabitsScreen>
@@ -102,6 +101,8 @@ const HabitsScreen = styled.main`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    justify-content: flex-start;
+
     width: 100%;    
     
     h1{
@@ -112,11 +113,6 @@ const HabitsScreen = styled.main`
     header button{
         width: 40px;
         height: 40px;
-    }
-
-    @media (min-width: 600px) {
-        justify-content: flex-start;
-        
     }
 `
 const SpinnerDiv = styled.div`
