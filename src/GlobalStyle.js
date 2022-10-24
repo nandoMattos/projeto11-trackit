@@ -63,9 +63,20 @@ a:visited {
 	color: none;
 }
 
+body {
+	@media (min-width: 800px) {
+        width: 60%;
+        margin: 0 auto;
+    }
+}
+
 main {
 	margin: 70px 0 75px 0;
 	background-color: #F2F2F2F2;
+
+	@media (min-width: 600px) {
+        height: 100vh;
+    }
 }
 
 input {

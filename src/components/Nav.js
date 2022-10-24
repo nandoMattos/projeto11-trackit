@@ -1,12 +1,13 @@
 import styled from "styled-components"
 import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar"
 import 'react-circular-progressbar/dist/styles.css';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MAIN_COLOR } from "../constants/colors";
 import { Link } from "react-router-dom";
+import ProgressContext from "../contexts/ProgressContext";
 
 export default function Nav() {
-    const [percentage, setPerecentage] = useState(50)
+    const {userProgress} = useContext(ProgressContext)
     
     return (
         <Menu>
@@ -17,7 +18,7 @@ export default function Nav() {
             <Link to="/hoje">
                 <ProgressbarContainer>
                     <CircularProgressbarWithChildren 
-                        value={percentage}
+                        value={userProgress}
                         background={true}
                         backgroundPadding = {6}
                         styles={buildStyles({

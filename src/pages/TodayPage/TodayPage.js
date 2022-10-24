@@ -7,8 +7,8 @@ import Header from "../../components/Header";
 import Nav from "../../components/Nav";
 import { API_URL } from "../../constants/urls";
 import { WEEKDAYS } from "../../constants/weekdays";
-import LoginContext from "../../context/LoginContext";
-import ProgressContext from "../../context/ProgressContext";
+import LoginContext from "../../contexts/LoginContext";
+import ProgressContext from "../../contexts/ProgressContext";
 import CardHabit from "./CardHabit";
 
 export default function TodayPage() {
@@ -22,37 +22,40 @@ export default function TodayPage() {
     const {userProgress, setUserProgress} = useContext(ProgressContext)
 
     const [todayHabits, setTodayHabits] = useState(undefined)
-    const [concludedTasks, setConcludedTasks] = useState([])
-    const [changedHabits, setChangedHabits] = useState(false); 
+    
+    console.log('oi')
 
     useEffect(()=>{
         if(authInfo === undefined){
             return navigate("/");
         }
+    }, [])
 
+    if(authInfo) {
         const config = {
             headers:{
                 Authorization: `Bearer ${authInfo.token}`
             }
         }
         axios.get(`${API_URL}/habits/today`, config)
-        .then(res=>setTodayHabits(res.data))
-        .catch(err=>console.log(err))
+        .then((res)=>{
+            setTodayHabits(res.data)
 
-        
-    },[changedHabits])
+        })
+        .catch(err=>console.log(err))
+    }
 
     return (
         <>
             <Header/>
             <TodayScreen>
                 <header>
-                    <h1>{todayWeekday.weekday}, {dayjs().format("DD/MM")}</h1>
+                    {/* <h1>{todayWeekday.weekday}, {dayjs().format("DD/MM")}</h1>
                     {concludedTasks.length != 0 ? 
                     <p>{userProgress}</p>
                     :
-                    <p>Nenhum hábito concluído ainda</p>
-                }
+                } */}
+                <p>Nenhum hábito concluído ainda</p>
                 </header>
 
                 {todayHabits &&
@@ -66,8 +69,6 @@ export default function TodayPage() {
                             done={h.done} 
                             currentSequence={h.currentSequence}
                             highestSequence={h.highestSequence}
-                            changedHabits={changedHabits}
-                            setChangedHabits={setChangedHabits}
                         />
                 
                     </ul>
@@ -96,6 +97,11 @@ const TodayScreen = styled.main`
     ul {
         /* background-color: green; */
         width: 80%;
+    }
+
+    @media (min-width: 600px) {
+        justify-content: flex-start;
+        
     }
 
 `

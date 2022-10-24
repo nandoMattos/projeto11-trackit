@@ -4,10 +4,10 @@ import SignIn from "./pages/Authentication/SignIn"
 import SignUp from "./pages/Authentication/SignUp";
 import HabitsPage from "./pages/HabitsPage/HabitsPage";
 import TodayPage from "./pages/TodayPage/TodayPage";
-import LoginContext from "./context/LoginContext";
+import LoginContext from "./contexts/LoginContext";
 import { useState } from "react";
 import HistoryPage from "./pages/HistoryPage/HistoryPage";
-import ProgressContext from "./context/ProgressContext";
+import ProgressContext from "./contexts/ProgressContext";
 
 export default function App() {
 

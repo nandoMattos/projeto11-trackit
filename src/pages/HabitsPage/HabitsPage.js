@@ -5,39 +5,44 @@ import NewHabitForm from "../HabitsPage/NewHabitForm";
 import axios from "axios";
 import { API_URL } from "../../constants/urls";
 import { useNavigate } from "react-router-dom";
-import LoginContext from "../../context/LoginContext";
+import LoginContext from "../../contexts/LoginContext";
 import Header from "../../components/Header";
 import Nav from "../../components/Nav";
+import ProgressContext from "../../contexts/ProgressContext";
+import { RotatingLines } from "react-loader-spinner";
+import { MAIN_COLOR } from "../../constants/colors";
 
 export default function HabitsPage() {
-
     const [habits, setHabits] = useState([])
     const [showNewHabitForm, setShowNewHabitForm] = useState(false);
     const [inputHabitName, setInputHabitName] = useState("");
     const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-    const [changedHabits, setChangedHabits] = useState(false); 
-
+    const [isLoading, setIsLoading] = useState(true)
+    
     const navigate = useNavigate();
     const {authInfo} = useContext(LoginContext);
-
+    const {setUserProgress} = useContext(ProgressContext)
 
     useEffect(()=>{
         if(authInfo === undefined){
             return navigate("/");
         }
-        console.log('oi')
-
+    
         const config = {
             headers:{
                 Authorization: `Bearer ${authInfo.token}`
             }
         }
-
+    
         axios.get(`${API_URL}/habits`, config)
-        .then((res)=>setHabits((res.data).reverse()))
+        .then((res)=>{
+            setHabits((res.data).reverse())
+            setIsLoading(false)
+        })
         .catch(err=>console.log(err))
+        
+    },[isLoading])
 
-    },[changedHabits])
 
     return (
         <>
@@ -45,7 +50,16 @@ export default function HabitsPage() {
 
         <HabitsScreen>
             <header>
-                <h1>Meus hábitos</h1>
+                <h1>
+                    Meus hábitos
+                    <SpinnerDiv>
+                        <RotatingLines 
+                            visible={isLoading}
+                            strokeColor={MAIN_COLOR}
+                            width='35px'
+                        />
+                    </SpinnerDiv>
+                </h1>
                 <button onClick={()=>setShowNewHabitForm(!showNewHabitForm)}>+</button>
             </header>
                 <HabitsContainer>
@@ -57,8 +71,9 @@ export default function HabitsPage() {
                         setInputHabitName = {setInputHabitName}
                         selectedWeekdays = {selectedWeekdays}
                         setSelectedWeekdays = {setSelectedWeekdays}
-                        changedHabits={changedHabits}
-                        setChangedHabits={setChangedHabits}
+                        isLoading  = {isLoading}
+                        setIsLoading  = {setIsLoading}
+        
                     />}
                     {habits.length !== 0 ? 
                         <ul>
@@ -68,13 +83,13 @@ export default function HabitsPage() {
                                     habitName={h.name}
                                     habitDays={h.days}
                                     habitId={h.id}
-                                    changedHabits={changedHabits}
-                                    setChangedHabits={setChangedHabits}
+                                    isLoading={isLoading}
+                                    setIsLoading={setIsLoading}
                                 />
                             )}
                         </ul>
                         :
-                        <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                        !isLoading && <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                     }
                 </HabitsContainer>
         </HabitsScreen>
@@ -90,12 +105,24 @@ const HabitsScreen = styled.main`
     align-items: center;
     justify-content: space-between;
     width: 100%;    
-
     
+    h1{
+        display: flex;
+        align-items: center;
+    }
+
     header button{
         width: 40px;
         height: 40px;
     }
+
+    @media (min-width: 600px) {
+        justify-content: flex-start;
+        
+    }
+`
+const SpinnerDiv = styled.div`
+    margin-left: 20px;
 `
 
 const HabitsContainer = styled.div `

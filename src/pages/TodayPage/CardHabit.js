@@ -1,7 +1,9 @@
 import axios from "axios";
+import { useContext, useState } from "react";
 import styled from "styled-components"
 import { CHECKED_GREEN, TEXT_COLOR, UNCHECKED_GRAY } from "../../constants/colors"
 import { API_URL } from "../../constants/urls";
+import ProgressContext from "../../contexts/ProgressContext";
 
 export default function CardHabit(props) {
     const { 
@@ -10,25 +12,27 @@ export default function CardHabit(props) {
         done, 
         currentSequence, 
         highestSequence,
-        token,
-        changedHabits,
-        setChangedHabits
-        
+        token
     } = props
-    
-    function checkTask () {
 
+    const {setUserProgress} = useContext(ProgressContext)
+    const [isChecked, setIsChecked] = useState(done)
+    
+    function handleCheck(action) {
         const config = {
             headers:{
                 Authorization: `Bearer ${token}`
             }
         }
+        setIsChecked(!isChecked)
 
-        axios.post(`${API_URL}/habits/${id}/check`, {}, config)
-        .catch(res=>console.log(res))
+        axios.post(`${API_URL}/habits/${id}/${action}`, {}, config)
+        .then(()=>{
+            // calculateProgress();
+            setUserProgress(4)
+        })
         .catch(err=>console.log(err.response))
 
-        setChangedHabits(!changedHabits);        
     }
 
     return (
@@ -40,9 +44,10 @@ export default function CardHabit(props) {
             </Text>
 
             <CheckBox
-                bgColor = {done ? CHECKED_GREEN : UNCHECKED_GRAY}
+                bgColor = {isChecked ? CHECKED_GREEN : UNCHECKED_GRAY}
             >
-                <ion-icon onClick={checkTask} name="checkmark-outline"></ion-icon>
+                <ion-icon onClick={isChecked ? ()=>handleCheck("uncheck") : ()=>handleCheck("check")} 
+                name="checkmark-outline"/>
             </CheckBox>
 
         </ItemCard>

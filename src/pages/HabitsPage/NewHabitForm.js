@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { ColorRing } from "react-loader-spinner";
 import styled from "styled-components"
 import { MAIN_COLOR, SELECTED_COLOR } from "../../constants/colors"
 import { API_URL } from "../../constants/urls";
 import { WEEKDAYS } from "../../constants/weekdays"
-import LoginContext from "../../context/LoginContext";
+import LoginContext from "../../contexts/LoginContext";
 
 export default function NewHabitForm(props) {
 
@@ -15,10 +16,11 @@ export default function NewHabitForm(props) {
         setInputHabitName,
         selectedWeekdays,
         setSelectedWeekdays,
-        changedHabits,
-        setChangedHabits
+        isLoading,
+        setIsLoading
 
     } = props;
+
 
     const {authInfo} = useContext(LoginContext)
 
@@ -31,24 +33,28 @@ export default function NewHabitForm(props) {
     }
     
     function submitHabit() {
+        if(selectedWeekdays.length === 0 || inputHabitName === ""){
+            alert("Digite um nome e selecione um dia")
+            return
+        }
+        setIsLoading(true)
         const body ={
             name: inputHabitName,
             days: selectedWeekdays
         }
-
         const config = {
             headers:{
                 Authorization: `Bearer ${authInfo.token}`
             },
         }
         axios.post(`${API_URL}/habits`, body, config)
-        .then(res=>console.log(res))
+        .then(()=>{
+            setShowNewHabitForm(!showNewHabitForm)
+            setInputHabitName("")
+            setSelectedWeekdays([])
+        })
         .catch(err=>alert(err.response.data.message))
 
-        setShowNewHabitForm(!showNewHabitForm)
-        setChangedHabits(!changedHabits);
-        setInputHabitName("")
-        setSelectedWeekdays([])
     }
 
     return (
@@ -58,6 +64,7 @@ export default function NewHabitForm(props) {
                 onChange={e => setInputHabitName(e.target.value)}
                 placeholder="nome do habito"
                 value={inputHabitName}
+                disabled={isLoading}
             />
 
             <WeekdaysContainer>
@@ -67,6 +74,7 @@ export default function NewHabitForm(props) {
                         statusBackground={selectedWeekdays.includes(w.id) ? SELECTED_COLOR : "white"}
                         statusFont={selectedWeekdays.includes(w.id) ? "white" : SELECTED_COLOR}
                         onClick={()=> toggleWeekdaySelection(w.id)}
+                        disabled={isLoading}
                     >
                     {w.name}
                     </WeekdayButton>
@@ -74,8 +82,29 @@ export default function NewHabitForm(props) {
             </WeekdaysContainer>
 
             <ButtonsContainer>
-                <CancelButton onClick={()=> setShowNewHabitForm(!showNewHabitForm)}>Cancelar</CancelButton>
-                <ConfirmButton onClick={submitHabit}>Salvar</ConfirmButton>
+                <CancelButton 
+                    onClick={()=> setShowNewHabitForm(!showNewHabitForm)}
+                    disabled={isLoading}
+                >
+                    Cancelar
+                </CancelButton>
+
+                <ConfirmButton 
+                    onClick={submitHabit}
+                    disabled={isLoading}
+                >
+                    {
+                        isLoading ?
+                        <ColorRing
+                            visible={isLoading}
+                            width="50px"
+                            height="50px"
+                            colors={["white", "white", "white", "white", "white"]}
+                        />
+                        :
+                        <>Salvar</>
+                    }
+                </ConfirmButton>
             </ButtonsContainer>
         </NewHabitContainer>
     )
@@ -91,11 +120,13 @@ const NewHabitContainer = styled.div`
     border-radius: 5px;
     margin-bottom: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+
     input {
         height: fit-content;
         word-wrap: break-word;
         font-size: 18px;
         padding: 10px;
+        margin-bottom: 5px;
     }
 
     input::placeholder {
@@ -114,7 +145,7 @@ const WeekdayButton = styled.button`
 	align-items: center;
     width: 30px;
     height: 30px;
-    margin-right: 5px;
+    margin: 0 5px 5px 0;
     font-size: 15px;
     background-color: ${({statusBackground})=>statusBackground};
     color: ${({statusFont})=>statusFont};

@@ -1,7 +1,7 @@
 import { useContext} from "react"
 import styled from "styled-components"
 import {SECONDARY_COLOR} from "../constants/colors"
-import LoginContext from "../context/LoginContext"
+import LoginContext from "../contexts/LoginContext"
 
 export default function Header() {
     const {authInfo} = useContext(LoginContext)

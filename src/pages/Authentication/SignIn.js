@@ -3,17 +3,21 @@ import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import {API_URL} from "../../constants/urls"
-import LoginContext from "../../context/LoginContext"
+import LoginContext from "../../contexts/LoginContext"
+import { ColorRing } from "react-loader-spinner";
+import { MAIN_COLOR } from "../../constants/colors";
 
 export default function SignIn() {
 
     const [inputEmail, setInputEmail] = useState("");
     const [inputPassword, setInputPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const  {setAuthInfo} = useContext(LoginContext)
+    const  {setAuthInfo} = useContext(LoginContext);
     const navigate = useNavigate();
 
     function handleForm(e) {
+        setIsLoading(true);
         e.preventDefault();
         const body = {
             email: inputEmail,
@@ -25,7 +29,10 @@ export default function SignIn() {
             setAuthInfo(res.data)
             navigate("/habitos")
         })
-        .catch(err=>alert(err.response.data.message))
+        .catch(err=>{
+            setIsLoading(false)
+            alert(err.response.data.message)
+        })
     }
 
     return (
@@ -40,6 +47,7 @@ export default function SignIn() {
                             placeholder="email"
                             required
                             onChange={e=> setInputEmail(e.target.value)}
+                            disabled={isLoading}
                         />
 
                         <input
@@ -47,11 +55,26 @@ export default function SignIn() {
                             placeholder="senha"
                             required
                             onChange={e=> setInputPassword(e.target.value)}
+                            disabled={isLoading}
                         />
 
-                        <button type="submit">Entrar</button>
+                        <button type="submit" disabled={isLoading}>
+                            {
+                                isLoading ?
+                                <ColorRing
+                                    visible={isLoading}
+                                    colors={['white',   'white', 'white', 'white', 'white']}
+                                    width="50px"
+                                    height="50px"
+                                />
+                                :
+                                <>Entrar</>
+                            }
+                        </button>
 
-                        <Link to="cadastrar">
+                       
+
+                        <Link to="cadastrar" disabled={isLoading}>
                             Não tem uma conta? Cadastre-se!
                         </Link>
                     </form>

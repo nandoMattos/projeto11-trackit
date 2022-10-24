@@ -1,12 +1,13 @@
 import axios from "axios"
 import { useContext } from "react"
+import { RotatingLines } from "react-loader-spinner"
 import styled from "styled-components"
-import {SELECTED_COLOR, TEXT_COLOR } from "../../constants/colors"
+import {MAIN_COLOR, SELECTED_COLOR, TEXT_COLOR } from "../../constants/colors"
 import { API_URL } from "../../constants/urls"
 import { WEEKDAYS } from "../../constants/weekdays"
-import LoginContext from "../../context/LoginContext"
+import LoginContext from "../../contexts/LoginContext"
 
-export default function Habit({habitName, habitDays, habitId, changedHabits, setChangedHabits}) {
+export default function Habit({habitName, habitDays, habitId, isLoading, setIsLoading}) {
 
     const {authInfo} = useContext(LoginContext)
     
@@ -16,6 +17,7 @@ export default function Habit({habitName, habitDays, habitId, changedHabits, set
         if(!confirm || confirm.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() !== 'sim'){
             return
         }
+        setIsLoading(true)
 
         const config = {
             headers:{
@@ -24,10 +26,7 @@ export default function Habit({habitName, habitDays, habitId, changedHabits, set
         };
 
         axios.delete(`${API_URL}/habits/${habitId}`, config)
-        .then(res=>console.log(res))
         .catch(err=>alert(err.response.data.message))
-
-        setChangedHabits(!changedHabits);
     }
 
     return (
@@ -44,11 +43,12 @@ export default function Habit({habitName, habitDays, habitId, changedHabits, set
                     {w.name}
                     </Weekday>
                 )}
-            </WeekdaysContainer>
-            
-            <TrashIconDiv>
-                <ion-icon onClick={deleteHabit} name="trash-outline"></ion-icon>
-            </TrashIconDiv>
+                
+                <TrashIconDiv>
+                    <ion-icon onClick={()=>deleteHabit()} name="trash-outline"></ion-icon>
+                </TrashIconDiv>
+            </WeekdaysContainer>            
+        
         </ItemHabit>
     )
 };
@@ -80,8 +80,8 @@ const WeekdaysContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     margin-left: 15px;
-
 `
+
 const TrashIconDiv = styled.div`
     position: absolute;
     top: 15px;
@@ -93,7 +93,7 @@ const Weekday = styled.div`
     align-items: center;
     width: 30px;
     height: 30px;
-    margin-right: 5px;
+    margin: 0 5px 5px 0;
     font-size: 15px;
     background-color: ${({statusBackground})=>statusBackground};
     color: ${({statusFont})=>statusFont};

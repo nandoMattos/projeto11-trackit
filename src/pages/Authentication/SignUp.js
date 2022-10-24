@@ -25,7 +25,8 @@ export default function SignUp() {
 
         axios.post(`${API_URL}/auth/sign-up`, body)
         .then((res)=>navigate("/"))
-        .catch((err)=>console.log(err))
+
+        .catch((err)=>console.log(err.response.data.message))
     }
 
     return (
