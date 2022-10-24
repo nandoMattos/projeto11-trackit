@@ -1,10 +1,12 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import Nav from "../../components/Nav";
+import { CHECKED_GREEN, MAIN_COLOR, TEXT_COLOR } from "../../constants/colors";
 import { API_URL } from "../../constants/urls";
 import { WEEKDAYS } from "../../constants/weekdays";
 import LoginContext from "../../contexts/LoginContext";
@@ -22,16 +24,28 @@ export default function TodayPage() {
     const {userProgress, setUserProgress} = useContext(ProgressContext)
 
     const [todayHabits, setTodayHabits] = useState(undefined)
-    
-    console.log('oi')
+    const [isLoading, setIsLoading] = useState(true)
+
+    function calculateProgress(todayHabits) {
+        const todayHabitsAmount = todayHabits.length
+        let countHabits = 0;
+
+        for(let habit of todayHabits){
+            if(habit.done === true) {
+                countHabits++;
+            }
+        }
+        if(todayHabits.length !== 0){
+            setUserProgress((countHabits/todayHabitsAmount)*100)
+        }
+
+    }
 
     useEffect(()=>{
         if(authInfo === undefined){
             return navigate("/");
         }
-    }, [])
-
-    if(authInfo) {
+       
         const config = {
             headers:{
                 Authorization: `Bearer ${authInfo.token}`
@@ -40,27 +54,51 @@ export default function TodayPage() {
         axios.get(`${API_URL}/habits/today`, config)
         .then((res)=>{
             setTodayHabits(res.data)
-
+            calculateProgress(res.data)
+            setIsLoading(false)
         })
         .catch(err=>console.log(err))
-    }
+    
+    }, [isLoading])
+
 
     return (
         <>
             <Header/>
             <TodayScreen>
                 <header>
-                    {/* <h1>{todayWeekday.weekday}, {dayjs().format("DD/MM")}</h1>
-                    {concludedTasks.length != 0 ? 
-                    <p>{userProgress}</p>
+                    <HeaderDiv>
+                        <h1>{todayWeekday.weekday}, {dayjs().format("DD/MM")}</h1>
+
+                        <SpinnerDiv>
+                            <RotatingLines 
+                                visible={isLoading}
+                                strokeColor={MAIN_COLOR}
+                                width='25px'
+                            />
+                        </SpinnerDiv>
+
+                    </HeaderDiv>
+                    {
+                    userProgress !== 0 ? 
+                    <Feedback//
+                        color={CHECKED_GREEN}
+                    >
+                        {Math.round(userProgress)}% dos hábitos concluídos
+                    </Feedback>
                     :
-                } */}
-                <p>Nenhum hábito concluído ainda</p>
+                    <Feedback
+                        color={TEXT_COLOR}
+                    >
+                        Nenhum hábito concluído ainda
+                    </Feedback>
+                    }
                 </header>
 
-                {todayHabits &&
-                todayHabits.map((h) => 
-                    <ul>
+                <ul>
+                {
+                    todayHabits &&
+                    todayHabits.map((h) => 
                         <CardHabit
                             key={h.id}
                             token={authInfo.token}
@@ -69,10 +107,15 @@ export default function TodayPage() {
                             done={h.done} 
                             currentSequence={h.currentSequence}
                             highestSequence={h.highestSequence}
+                            todayHabits={todayHabits}
+                            setTodayHabits={setTodayHabits}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading}
                         />
-                
-                    </ul>
-                )}
+                    
+                    )
+                }
+                </ul>
 
             </TodayScreen>
             <Nav/>
@@ -92,7 +135,13 @@ const TodayScreen = styled.main`
         height: 45px;
         flex-direction: column;
         align-items: flex-start;
+
+        h1{
+            display: flex;
+            align-items: center;
+        }
     }
+
 
     ul {
         /* background-color: green; */
@@ -104,4 +153,18 @@ const TodayScreen = styled.main`
         
     }
 
+`
+
+const HeaderDiv = styled.div`
+    display: flex;
+    height: 100px;
+`
+
+const SpinnerDiv = styled.div`
+    margin-left: 20px;
+`
+
+const Feedback = styled.div`
+    font-size: 18px;
+    color: ${ ({color})=>color }
 `

@@ -1,3 +1,4 @@
+import { fireEvent } from "@testing-library/react";
 import axios from "axios";
 import { useContext, useState } from "react";
 import styled from "styled-components"
@@ -12,13 +13,17 @@ export default function CardHabit(props) {
         done, 
         currentSequence, 
         highestSequence,
-        token
+        token,
+        todayHabits,
+        setTodayHabits,
+        setIsLoading
     } = props
 
     const {setUserProgress} = useContext(ProgressContext)
     const [isChecked, setIsChecked] = useState(done)
-    
+
     function handleCheck(action) {
+        setIsLoading(true)
         const config = {
             headers:{
                 Authorization: `Bearer ${token}`
@@ -27,10 +32,6 @@ export default function CardHabit(props) {
         setIsChecked(!isChecked)
 
         axios.post(`${API_URL}/habits/${id}/${action}`, {}, config)
-        .then(()=>{
-            // calculateProgress();
-            setUserProgress(4)
-        })
         .catch(err=>console.log(err.response))
 
     }
@@ -39,8 +40,20 @@ export default function CardHabit(props) {
         <ItemCard>
             <Text>
                 <h1>{name}</h1>
-                <p>Sequência atual: {currentSequence} dias</p>
-                <p>Seu recorde: {highestSequence} dias</p>
+                <p>Sequência atual: 
+                    <Span 
+                        color={done ? CHECKED_GREEN : TEXT_COLOR}
+                    >
+                        {currentSequence} dias
+                    </Span>
+                </p>
+                <p>Seu recorde: 
+                    <Span 
+                        color={currentSequence === highestSequence && highestSequence !== 0 ? CHECKED_GREEN : TEXT_COLOR}
+                    >
+                    {highestSequence} dias
+                    </Span>
+                </p>
             </Text>
 
             <CheckBox
@@ -77,6 +90,11 @@ const Text = styled.div`
         width: 90%;
         padding-bottom: 10px;
     }
+`
+
+const Span = styled.span`
+    margin-left: 8px;
+    color:${ ({color})=>color };
 `
 
 const CheckBox = styled.div`

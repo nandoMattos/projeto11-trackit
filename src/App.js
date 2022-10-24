@@ -12,7 +12,7 @@ import ProgressContext from "./contexts/ProgressContext";
 export default function App() {
 
     const [authInfo, setAuthInfo] = useState(undefined);
-    const [userProgress, setUserProgress] = useState(undefined)
+    const [userProgress, setUserProgress] = useState(0)
     
     return (
         <>

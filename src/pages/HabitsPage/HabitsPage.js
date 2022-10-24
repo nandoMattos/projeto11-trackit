@@ -21,7 +21,6 @@ export default function HabitsPage() {
     
     const navigate = useNavigate();
     const {authInfo} = useContext(LoginContext);
-    const {setUserProgress} = useContext(ProgressContext)
 
     useEffect(()=>{
         if(authInfo === undefined){
@@ -64,7 +63,7 @@ export default function HabitsPage() {
             </header>
                 <HabitsContainer>
                     {showNewHabitForm && 
-                    <NewHabitForm 
+                    <NewHabitForm
                         showNewHabitForm = {showNewHabitForm} 
                         setShowNewHabitForm = {setShowNewHabitForm}
                         inputHabitName = {inputHabitName}
@@ -83,7 +82,6 @@ export default function HabitsPage() {
                                     habitName={h.name}
                                     habitDays={h.days}
                                     habitId={h.id}
-                                    isLoading={isLoading}
                                     setIsLoading={setIsLoading}
                                 />
                             )}

@@ -5,7 +5,6 @@ import styled from "styled-components"
 import {API_URL} from "../../constants/urls"
 import LoginContext from "../../contexts/LoginContext"
 import { ColorRing } from "react-loader-spinner";
-import { MAIN_COLOR } from "../../constants/colors";
 
 export default function SignIn() {
 
@@ -27,7 +26,7 @@ export default function SignIn() {
         axios.post(`${API_URL}/auth/login`, body)
         .then(res=>{
             setAuthInfo(res.data)
-            navigate("/habitos")
+            navigate("/hoje")
         })
         .catch(err=>{
             setIsLoading(false)
@@ -48,6 +47,7 @@ export default function SignIn() {
                             required
                             onChange={e=> setInputEmail(e.target.value)}
                             disabled={isLoading}
+                            data-identifier="input-email"
                         />
 
                         <input
@@ -56,9 +56,14 @@ export default function SignIn() {
                             required
                             onChange={e=> setInputPassword(e.target.value)}
                             disabled={isLoading}
+                            data-identifier="input-password"
                         />
 
-                        <button type="submit" disabled={isLoading}>
+                        <button 
+                            type="submit"
+                            disabled={isLoading}
+                            data-identifier="login-btn"
+                        >
                             {
                                 isLoading ?
                                 <ColorRing
@@ -74,7 +79,7 @@ export default function SignIn() {
 
                        
 
-                        <Link to="cadastrar" disabled={isLoading}>
+                        <Link to="cadastrar" disabled={isLoading} data-identifier="sign-up-action">
                             Não tem uma conta? Cadastre-se!
                         </Link>
                     </form>

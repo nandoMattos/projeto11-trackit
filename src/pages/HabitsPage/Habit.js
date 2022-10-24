@@ -1,22 +1,21 @@
 import axios from "axios"
 import { useContext } from "react"
-import { RotatingLines } from "react-loader-spinner"
 import styled from "styled-components"
-import {MAIN_COLOR, SELECTED_COLOR, TEXT_COLOR } from "../../constants/colors"
+import {SELECTED_COLOR, TEXT_COLOR } from "../../constants/colors"
 import { API_URL } from "../../constants/urls"
 import { WEEKDAYS } from "../../constants/weekdays"
 import LoginContext from "../../contexts/LoginContext"
 
-export default function Habit({habitName, habitDays, habitId, isLoading, setIsLoading}) {
+export default function Habit({habitName, habitDays, habitId, setIsLoading}) {
 
     const {authInfo} = useContext(LoginContext)
     
     
     function deleteHabit() {
-        const confirm = prompt(`Deseja remover "${habitName}?" (Digite sim ou não)`)
-        if(!confirm || confirm.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() !== 'sim'){
+        if(window.confirm(`Deseja excluir "${habitName}"?`) == false) {
             return
         }
+        
         setIsLoading(true)
 
         const config = {
@@ -45,7 +44,7 @@ export default function Habit({habitName, habitDays, habitId, isLoading, setIsLo
                 )}
                 
                 <TrashIconDiv>
-                    <ion-icon onClick={()=>deleteHabit()} name="trash-outline"></ion-icon>
+                    <ion-icon onClick={deleteHabit} name="trash-outline"></ion-icon>
                 </TrashIconDiv>
             </WeekdaysContainer>            
         
