@@ -122,7 +122,7 @@ const LoginContainer = styled.div`
 const FormLoginContainer = styled.div`
   display: flex;
   width: 100%;
-  height: 30%;
+  height: 200px;
 
   form {
     display: flex;
