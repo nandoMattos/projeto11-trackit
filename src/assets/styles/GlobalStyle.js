@@ -1,7 +1,12 @@
 import { createGlobalStyle } from "styled-components";
-import { MAIN_COLOR, SECONDARY_COLOR, TEXT_COLOR } from "../../constants/colors";
+import {
+  MAIN_COLOR,
+  SECONDARY_COLOR,
+  TEXT_COLOR,
+} from "../../constants/colors";
 
 const GlobalStyle = createGlobalStyle`
+// Reset Css
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -27,6 +32,8 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+// My styles
 body {
 	line-height: 1;
 }
@@ -65,9 +72,9 @@ a:visited {
 
 body {
 	@media (min-width: 800px) {
-        width: 60%;
-        margin: 0 auto;
-    }
+    width: 60%;
+    margin: 0 auto;
+  }
 }
 
 main {
@@ -91,7 +98,7 @@ input::placeholder {
 
 input:focus {
 	outline: none;
-}
+} 
 
 button {
 	width: 100%;
@@ -121,7 +128,6 @@ header h1{
 p{
 	color:${TEXT_COLOR}
 }
+`;
 
-`
-
-export default GlobalStyle
+export default GlobalStyle;
