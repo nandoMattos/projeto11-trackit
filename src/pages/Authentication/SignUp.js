@@ -77,7 +77,7 @@ export default function SignUp() {
             />
             <input
               type="url"
-              placeholder="foto (URL)"
+              placeholder="foto"
               required
               onChange={(e) => setInputPicture(e.target.value)}
               value={inputPicture}
